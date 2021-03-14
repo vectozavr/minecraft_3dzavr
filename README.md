@@ -33,3 +33,4 @@ Simple implementation of game [Minecraft](https://www.minecraft.net/) using [3dz
 For any issues, please, create new issue in this repository.
 
 Demo:
+![Project demonstration](img/cubes_1.png)
