@@ -2,7 +2,7 @@
 
 <h4>About:</h4>
 
-Simple implementation of game "Minecraft" using [3dzavr](https://github.com/vectozavr/3dzavr)
+Simple implementation of game [Minecraft](https://www.minecraft.net/) using [3dzavr](https://github.com/vectozavr/3dzavr)
 
 <h4>Installation:</h4>
 

@@ -161,8 +161,10 @@ std::pair<bool, Simplex> RigidBody::checkGJKCollision(RigidBody &obj) {
 
         points.push_front(support);
 
-        if (_nextSimplex(points, direction))
+        if (_nextSimplex(points, direction)) {
+            _inCollision = true;
             return std::make_pair(true, points);
+        }
 
     }
 }

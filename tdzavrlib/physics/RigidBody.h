@@ -31,6 +31,8 @@ private:
     bool _collision = false;
     bool _debugMode = false;
 
+    bool _inCollision = false;
+
     Point4D _findFurthestPoint(const Point4D& direction);
     Point4D _support(RigidBody& obj, const Point4D& direction);
 
@@ -50,6 +52,8 @@ public:
     CollisionPoint EPA(const Simplex& simplex, RigidBody &obj);
 
     [[nodiscard]] bool isCollision() const { return _collision; }
+    [[nodiscard]] bool inCollision() const {return _inCollision; }
+    void setInCollision(bool c) { _inCollision = c; }
     void setCollision(bool c) { _collision= c; }
 
     [[nodiscard]] virtual std::vector<Triangle>& triangles() = 0;

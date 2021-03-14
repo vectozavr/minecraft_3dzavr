@@ -59,14 +59,14 @@ std::vector<Triangle> &Camera::project(const Mesh &mesh, Screen::ViewMode mode) 
             if(!isExternal) {
                 //sf::Color color = clippedTriangle.
                 if(mode != Screen::ViewMode::Clipped)
-                    clippedTriangle.color = sf::Color(clippedTriangle.color.r * (0.3 * std::abs(dot) + 0.7), clippedTriangle.color.g * (0.3 * std::abs(dot) + 0.7), clippedTriangle.color.b * (0.3 * std::abs(dot) + 0.7), (mode == Screen::ViewMode::Transparency || mode == Screen::ViewMode::Normals) ? 100 : 255);
+                    clippedTriangle.color = sf::Color(clippedTriangle.color.r * (0.3 * std::abs(dot) + 0.7), clippedTriangle.color.g * (0.3 * std::abs(dot) + 0.7), clippedTriangle.color.b * (0.3 * std::abs(dot) + 0.7), (mode == Screen::ViewMode::Transparency || mode == Screen::ViewMode::Normals) ? 100 : clippedTriangle.color.a);
                 // This is for clipping demonstration.
                 // If you want to debug clipping just comment previous line and uncomment this block of code.
                 else {
                     if (clippedTriangle.clip == Triangle::None)
                         clippedTriangle.color = sf::Color(clippedTriangle.color.r * (0.3 * std::abs(dot) + 0.7),
                                                           clippedTriangle.color.g * (0.3 * std::abs(dot) + 0.7),
-                                                          clippedTriangle.color.b * (0.3 * std::abs(dot) + 0.7), 255);
+                                                          clippedTriangle.color.b * (0.3 * std::abs(dot) + 0.7), clippedTriangle.color.a);
                     else if (clippedTriangle.clip == Triangle::Cropped)
                         clippedTriangle.color = sf::Color(0, 0, 194 * (0.3 * std::abs(dot) + 0.7), 255);
                     else if (clippedTriangle.clip == Triangle::Doubled)

@@ -40,17 +40,13 @@ void Tdzavr::create(int screenWidth, int screenHeight, const std::string &name, 
             m.second.updatePhysicsState();
             // isCollision detection:
             if(m.second.isCollision()) {
+                m.second.setInCollision(false);
                 for (auto &obj : world.objects()) {
                     if (obj.first != m.first) {
                         std::pair<bool, Simplex> gjk = m.second.checkGJKCollision(obj.second);
                         if (gjk.first) {
-                            m.second.setColor({255, 0, 0});
-                            obj.second.setColor({255, 0, 0});
                             CollisionPoint epa = m.second.EPA(gjk.second, obj.second);
                             Solver::solveCollision(m.second, obj.second, epa);
-                        } else {
-                            m.second.setColor({0, 255, 0});
-                            obj.second.setColor({0, 255, 0});
                         }
                     }
                 }
