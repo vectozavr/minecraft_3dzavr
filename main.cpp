@@ -13,6 +13,7 @@ using namespace std;
 class TestGame : public Tdzavr {
 private:
     CameraController cameraController;
+    CameraController externalCameraController;
 
     Player player;
     Map map;
@@ -26,7 +27,7 @@ public:
     void switchCamera();
 };
 
-TestGame::TestGame() : cameraController(camera, screen), player(camera, world, screen), map(world)
+TestGame::TestGame() : cameraController(camera, screen), externalCameraController(external_camera, screen), player(camera, world, screen), map(world)
 {
 
 }
@@ -34,7 +35,6 @@ TestGame::TestGame() : cameraController(camera, screen), player(camera, world, s
 void TestGame::start() {
     // This code executed once in the beginning:
 
-    screen.setMode(Screen::ViewMode::Transparency);
     screen.setMouseCursorVisible(false);
 
     //world.loadObj("../obj/cube.obj", "ground", {10, 0.1, 10});
@@ -49,7 +49,7 @@ void TestGame::start() {
 
     for(int i = -10; i < 10; i++) {
         for(int j = -10; j < 10; j++) {
-            map.addCube(Cube::stone, i, 0, j);
+            map.addCube(Cube::earth, i, 0, j);
         }
     }
 
@@ -62,12 +62,18 @@ void TestGame::update(double elapsedTime) {
     if (!screen.window.hasFocus())
         return;
 
-    player.update();
+    if(cameraMode == CameraMode::LocalCamera)
+        player.update();
+    else
+        externalCameraController.update();
 
     //cameraController.update();
 
     if(screen.isKeyTapped(sf::Keyboard::Escape))
         exit();
+
+    if(screen.isKeyTapped(sf::Keyboard::E))
+        switchCamera();
 }
 
 void TestGame::switchCamera() {

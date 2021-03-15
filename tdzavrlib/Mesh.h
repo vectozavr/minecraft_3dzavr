@@ -10,13 +10,11 @@
 #include "animation/Animatable.h"
 #include "physics/RigidBody.h"
 #include <SFML/Graphics.hpp>
+#include "Object.h"
 
-class Mesh : public Animatable, public RigidBody {
+class Mesh : public Object, public Animatable, public RigidBody {
 protected:
     std::vector<Triangle> tris;
-
-    Point4D p_position;
-    Point4D p_angle;
 
     sf::Color c_color = sf::Color(255, 245, 194);
 

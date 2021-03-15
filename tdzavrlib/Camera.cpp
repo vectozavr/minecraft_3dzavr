@@ -26,7 +26,10 @@ std::vector<Triangle> &Camera::project(const Mesh &mesh, Screen::ViewMode mode) 
     for(auto& t : mesh.triangles()) {
 
         double dot = t.norm().dot((mesh.position() + t[0] - p_eye).normalize());
-        if(dot > 0 && !(mode == Screen::ViewMode::Xray) && !(mode == Screen::ViewMode::Transparency) && !(mode == Screen::ViewMode::Normals) && !isExternal )
+        //double dot = t.norm().dot(p_lookAt);
+
+        if(dot > 0 && mode != Screen::ViewMode::Xray && mode != Screen::ViewMode::Transparency &&
+           mode != Screen::ViewMode::Normals && !isExternal )
             continue;
 
         Triangle clipped[2];
@@ -64,9 +67,9 @@ std::vector<Triangle> &Camera::project(const Mesh &mesh, Screen::ViewMode mode) 
                 // If you want to debug clipping just comment previous line and uncomment this block of code.
                 else {
                     if (clippedTriangle.clip == Triangle::None)
-                        clippedTriangle.color = sf::Color(clippedTriangle.color.r * (0.3 * std::abs(dot) + 0.7),
-                                                          clippedTriangle.color.g * (0.3 * std::abs(dot) + 0.7),
-                                                          clippedTriangle.color.b * (0.3 * std::abs(dot) + 0.7), clippedTriangle.color.a);
+                        clippedTriangle.color = sf::Color(clippedTriangle.color.r * (0.1 * std::abs(dot) + 0.9),
+                                                          clippedTriangle.color.g * (0.1 * std::abs(dot) + 0.9),
+                                                          clippedTriangle.color.b * (0.1 * std::abs(dot) + 0.9), clippedTriangle.color.a);
                     else if (clippedTriangle.clip == Triangle::Cropped)
                         clippedTriangle.color = sf::Color(0, 0, 194 * (0.3 * std::abs(dot) + 0.7), 255);
                     else if (clippedTriangle.clip == Triangle::Doubled)
@@ -74,7 +77,7 @@ std::vector<Triangle> &Camera::project(const Mesh &mesh, Screen::ViewMode mode) 
                 }
             }
 
-            double z = (clippedTriangle[0].z + clippedTriangle[1].z + clippedTriangle[2].z) / 3.0;
+            double distance = (clippedTriangle[0] + clippedTriangle[1] + clippedTriangle[2]).abs();
 
             // Before we projected aur clipped colored triangle, we need to save it's state
             // If we want to observe them from external camera. When we call Tdzavr::setCameraMode(CameraMode::ExternalObserver);
@@ -145,7 +148,7 @@ std::vector<Triangle> &Camera::project(const Mesh &mesh, Screen::ViewMode mode) 
              * clippedTriangle - one clipped triangle from mesh
              *
              * M - translation from mesh coordinate to world coordinate
-             * A - animation matrix (to express transitional state of the mesh)
+             * A - animation matrix (to express transitional state of the mesh) (deprecated)
              * V - transform from world coordinate to camera' coordinate
              * P - project tris from camera' coordinate to camera 2d plane
              * S - transform 2d plane' coordinate to screen coordinate (in pixels)
@@ -153,6 +156,9 @@ std::vector<Triangle> &Camera::project(const Mesh &mesh, Screen::ViewMode mode) 
             clippedTriangle[0] /= clippedTriangle[0].w;
             clippedTriangle[1] /= clippedTriangle[1].w;
             clippedTriangle[2] /= clippedTriangle[2].w;
+
+            // Trying to solve incorrect triangle Z buffering
+            //clippedTriangle[0].z = distance;
 
             triangles.emplace_back(clippedTriangle);
         }

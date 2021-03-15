@@ -104,11 +104,18 @@ Mesh Mesh::Cube(double size) {
 
 void Mesh::translate(double dx, double dy, double dz) {
     p_position += Point4D(dx, dy, dz, 0);
+
+    if(v_attached.empty())
+        return;
+    for(auto attached : v_attached)
+        attached->translate({dx, dy, dz});
 }
 
 void Mesh::rotate(double rx, double ry, double rz) {
     p_angle += Point4D{rx, ry, rz};
     *this *= Matrix4x4::Rotation(rx, ry, rz);
+
+
 }
 
 void Mesh::rotate(const Point4D &r) {

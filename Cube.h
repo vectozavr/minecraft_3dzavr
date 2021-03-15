@@ -31,10 +31,10 @@ public:
                 c_color = sf::Color(255, 235, 153);
                 break;
             case glass:
-                c_color = sf::Color(176, 243, 255, 100);
+                c_color = sf::Color(255, 255, 255, 50);
                 break;
             case water:
-                c_color = sf::Color(120, 147, 255, 200);
+                c_color = sf::Color(120, 147, 255, 100);
                 break;
             case stone:
                 c_color = sf::Color(148, 148, 148);

@@ -165,7 +165,6 @@ std::pair<bool, Simplex> RigidBody::checkGJKCollision(RigidBody &obj) {
             _inCollision = true;
             return std::make_pair(true, points);
         }
-
     }
 }
 
@@ -185,7 +184,9 @@ CollisionPoint RigidBody::EPA(const Simplex& simplex, RigidBody &obj) {
     Point4D minNormal;
     double minDistance = INFINITY;
 
-    while (minDistance == INFINITY) {
+    int iterations = 0;
+
+    while ((minDistance == INFINITY) && (iterations < 50)) {
         minNormal   = normals[minFace];
         minDistance = normals[minFace].w;
 
@@ -224,6 +225,9 @@ CollisionPoint RigidBody::EPA(const Simplex& simplex, RigidBody &obj) {
 
             auto [newNormals, newMinFace] = GetFaceNormals(polytope, newFaces);
 
+            if(newNormals.empty())
+                break;
+
             double oldMinDistance = INFINITY;
             for (size_t i = 0; i < normals.size(); i++) {
                 if (normals[i].w < oldMinDistance) {
@@ -239,12 +243,13 @@ CollisionPoint RigidBody::EPA(const Simplex& simplex, RigidBody &obj) {
             faces  .insert(faces  .end(), newFaces  .begin(), newFaces  .end());
             normals.insert(normals.end(), newNormals.begin(), newNormals.end());
         }
+        iterations++;
     }
     CollisionPoint points;
 
     points.normal = minNormal;
     points.depth = minDistance + 0.0001;
-    points.hasCollision = true;
+    points.hasCollision = minDistance < INFINITY;
 
     return points;
 }

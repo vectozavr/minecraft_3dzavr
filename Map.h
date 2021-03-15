@@ -13,6 +13,8 @@ class Map {
 private:
     World& world;
     std::vector<std::string> cubes;
+
+
 public:
     explicit Map(World& world): world(world) {}
 

@@ -10,7 +10,7 @@
 #include "Plane.h"
 #include "Mesh.h"
 
-class Camera : public Animatable{
+class Camera : public Object, public Animatable{
 private:
     Point4D p_eye;
     Point4D p_angle;
@@ -51,7 +51,7 @@ public:
     Camera(const Camera& camera) = delete;
 
 
-    void init(int width, int height, double fov = 90.0, double ZNear = 0.1, double ZFar = 500.0);
+    void init(int width, int height, double fov = 110.0, double ZNear = 0.1, double ZFar = 5000.0);
 
     std::vector<Triangle>& project(const Mesh &mesh, Screen::ViewMode mode);
 
@@ -73,7 +73,14 @@ public:
     [[nodiscard]] Point4D down() const { return -p_up; }
     [[nodiscard]] Point4D lookAt() const { return p_lookAt; }
 
-    void translate(const Point4D& dv) override { p_eye += dv; }
+    void translate(const Point4D& dv) override {
+        p_eye += dv;
+
+        if(v_attached.empty())
+            return;
+        for(auto attached : v_attached)
+            attached->translate(dv);
+    }
     void translate(double dx, double dy, double dz) { p_eye += Point4D(dx, dy, dz, 0); }
     void attractToPoint(const Point4D& point, double r) override;
     void translateToPoint(const Point4D& point);
@@ -114,6 +121,10 @@ public:
     [[nodiscard]] double width() const {return w;}
     [[nodiscard]] double height() const {return h;}
     void setProjectionLines(bool p) { projectionLines = p; }
+
+    void attach(Mesh* mesh) {
+        v_attached.push_back(mesh);
+    }
 };
 
 

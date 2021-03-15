@@ -7,27 +7,37 @@
 #include <iostream>
 
 void Player::update() {
+
+    bool inRunning_old = inRunning;
+    inRunning = Screen::isKeyPressed(sf::Keyboard::A) || Screen::isKeyPressed(sf::Keyboard::D) ||Screen::isKeyPressed(sf::Keyboard::W) || Screen::isKeyPressed(sf::Keyboard::S);
+    if(!inRunning_old && inRunning) {
+        camera.a_stopAnimations();
+        camera.a_wait(0);
+        camera.a_translate(-Point4D{0, 1, 0}/4, 0.2, Animation::LoopOut::Cycle, Animation::cos);
+    } else if(inRunning_old && !inRunning) {
+        camera.a_stopAnimations();
+        camera.a_translateToPoint(hitBox().position() + Point4D{0, 1.8, 0}, 0.2, Animation::None, Animation::cos);
+    }
+
     // Left and right
     if (Screen::isKeyPressed(sf::Keyboard::A))
-        hitBox().translate(camera.left()*Time::deltaTime()*5.0);
+        hitBox().translate(camera.left()*Time::deltaTime()*walkSpeed);
 
     if (Screen::isKeyPressed(sf::Keyboard::D))
-        hitBox().translate(-camera.left()*Time::deltaTime()*5.0);
+        hitBox().translate(-camera.left()*Time::deltaTime()*walkSpeed);
 
     // Forward and backward
     if (Screen::isKeyPressed(sf::Keyboard::W))
-        hitBox().translate(camera.left().cross3D({0, 1, 0})*Time::deltaTime()*5.0);
+        hitBox().translate(camera.left().cross3D({0, 1, 0})*Time::deltaTime()*walkSpeed);
 
     if (Screen::isKeyPressed(sf::Keyboard::S))
-        hitBox().translate(-camera.left().cross3D({0, 1, 0})*Time::deltaTime()*5.0);
+        hitBox().translate(-camera.left().cross3D({0, 1, 0})*Time::deltaTime()*walkSpeed);
 
-    if (Screen::isKeyPressed(sf::Keyboard::LShift))
-        hitBox().translate(0.0, -Time::deltaTime()*5.0, 0);
+    if (Screen::isKeyPressed(sf::Keyboard::Space) && hitBox().inCollision()) {
+        hitBox().setVelocity(hitBox().velocity() + Point4D{0, sqrt(2 * g * jumpHeight), 0});
+    }
 
-    if (Screen::isKeyPressed(sf::Keyboard::Space) && hitBox().inCollision())
-        hitBox().setVelocity(hitBox().velocity() + Point4D{0, sqrt(2*g*1.5), 0});
-
-    camera.translateToPoint(hitBox().position() + Point4D{0, 1.8, 0});
+    //camera.translateToPoint(hitBox().position() + Point4D{0, 1.8, 0});
 
     // Mouse movement
     Point4D disp = screen.getMouseDisplacement();
