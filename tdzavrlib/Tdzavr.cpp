@@ -42,7 +42,7 @@ void Tdzavr::create(int screenWidth, int screenHeight, const std::string &name, 
             if(m.second.isCollision()) {
                 m.second.setInCollision(false);
                 for (auto &obj : world.objects()) {
-                    if (obj.first != m.first) {
+                    if (obj.first != m.first && obj.second.isCollider()) {
                         std::pair<bool, Simplex> gjk = m.second.checkGJKCollision(obj.second);
                         if (gjk.first) {
                             CollisionPoint epa = m.second.EPA(gjk.second, obj.second);

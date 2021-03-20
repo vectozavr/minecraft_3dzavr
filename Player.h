@@ -8,6 +8,7 @@
 #include "tdzavrlib/Mesh.h"
 #include "tdzavrlib/Camera.h"
 #include "tdzavrlib/World.h"
+#include "Map.h"
 
 class Player {
 private:
@@ -20,19 +21,31 @@ private:
     Camera& camera;
     World& world;
     Screen& screen;
+    Map& map;
 
     bool inRunning = false;
 
+    Cube::Type selectedBlock = Cube::Type::stone;
+
 public:
-    Player(Camera& camera, World& world, Screen& screen) : camera(camera), world(world), screen(screen) {
+    Player(Camera& camera, World& world, Screen& screen, Map& map) : camera(camera), world(world), screen(screen), map(map) {
         world.loadObj("../obj/cube.obj", "player",{0.5, 1.9, 0.5});
         hitBox().translate({0, 5, 0});
         hitBox().setCollision(true);
         hitBox().setAcceleration({0, -g, 0});
 
         camera.translateToPoint(hitBox().position() + Point4D{0, 1.8, 0});
-
         hitBox().attach(reinterpret_cast<Mesh *>(&camera));
+
+        world.loadObj("../obj/cube.obj", "player_hand",{0.3, 0.3, 0.8});
+        world["player_hand"].setCollider(false);
+        world["player_hand"].translateToPoint(camera.position() + Point4D{1, -2, 0});
+
+        hitBox().attach(&world["player_hand"]);
+        hitBox().setVisible(false);
+        world["player_hand"].translate({-2.5, 0.2, 0.7});
+        world["player_hand"].rotate({-M_PI/10, 0, M_PI/6});
+        //world["player_hand"].rotate({-M_PI/6, 0, M_PI/6});
     }
 
     void update();

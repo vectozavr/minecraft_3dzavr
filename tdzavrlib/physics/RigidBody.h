@@ -29,7 +29,7 @@ private:
     double _mass = 1.0;
 
     bool _collision = false;
-    bool _debugMode = false;
+    bool _isCollider = true;
 
     bool _inCollision = false;
 
@@ -53,8 +53,10 @@ public:
 
     [[nodiscard]] bool isCollision() const { return _collision; }
     [[nodiscard]] bool inCollision() const {return _inCollision; }
+    [[nodiscard]] bool isCollider() const {return _isCollider; }
     void setInCollision(bool c) { _inCollision = c; }
     void setCollision(bool c) { _collision= c; }
+    void setCollider(bool c) { _isCollider = c; }
 
     [[nodiscard]] virtual std::vector<Triangle>& triangles() = 0;
 
@@ -72,7 +74,6 @@ public:
 
     [[nodiscard]] Point4D velocity() const { return p_velocity; }
 
-    void setDebugMode(bool mode) { _debugMode = mode; }
     [[nodiscard]] double mass() const { return _mass; }
     void setMass(double val) { _mass = val; }
 };

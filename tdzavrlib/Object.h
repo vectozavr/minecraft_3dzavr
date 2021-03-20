@@ -19,9 +19,14 @@ public:
 
     virtual void translate(const Point4D& dv) {}
     virtual void rotate(const Point4D& r) {}
+    virtual void rotateRelativePoint(const Point4D& point4D, const Point4D& r) {}
+    virtual void rotate(const Point4D& v, double rv) {}
+    virtual void rotateRelativePoint(const Point4D& s, const Point4D& v, double r) {}
 
-    void attach(Object* mesh) {
-        v_attached.push_back(mesh);
+    [[nodiscard]] virtual Point4D position() const { return p_position; }
+
+    void attach(Object* object) {
+        v_attached.push_back(object);
     }
 };
 

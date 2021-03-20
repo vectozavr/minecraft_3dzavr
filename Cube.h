@@ -17,7 +17,10 @@ public:
         water,
         stone,
         earth,
-        wood
+        wood,
+        snow,
+
+        none
     };
 private:
     Type type;
@@ -44,6 +47,9 @@ public:
                 break;
             case wood:
                 c_color = sf::Color(117, 74, 39);
+                break;
+            case snow:
+                c_color = sf::Color(255, 255, 255);
                 break;
             default:
                 c_color = sf::Color(255, 245, 194);

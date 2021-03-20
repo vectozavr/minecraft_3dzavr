@@ -5,6 +5,9 @@
 #include "Map.h"
 
 void Map::addCube(Cube::Type t, int posX, int posY, int posZ) {
-    cubes.push_back("cube_" + std::to_string(t) + "_" + std::to_string(cubes.size()));
-    world.addMesh(Cube(t, posX, posY, posZ), cubes.back());
+    world.addMesh(Cube(t, posX, posY, posZ), "cube_X_" + std::to_string(posX) + "_Y_" + std::to_string(posY) + "_Z_" + std::to_string(posZ));
+}
+
+void Map::removeCube(int posX, int posY, int posZ) {
+    world.removeMesh("cube_X_" + std::to_string(posX) + "_Y_" + std::to_string(posY) + "_Z_" + std::to_string(posZ));
 }
