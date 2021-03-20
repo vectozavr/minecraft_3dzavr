@@ -34,3 +34,4 @@ For any issues, please, create new issue in this repository.
 
 Demo:
 ![Project demonstration](img/cubes_1.png)
+![Project demonstration](img/building_1.png)
