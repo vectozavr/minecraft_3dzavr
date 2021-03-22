@@ -65,7 +65,7 @@ void Player::update() {
         rotationLeft = -M_PI / 2 - camera.angleLeftUpLookAt().x;
 
     camera.rotateLeft(rotationLeft);
-    world["player_hand"].rotateRelativePoint(camera.position(),camera.left(), rotationLeft);
+    world["player_hand"].rotateRelativePoint(hitBox().position() + Point4D{0, 1.8, 0},camera.left(), rotationLeft);
 
 
     if (screen.isKeyTapped(sf::Keyboard::Right)) {
