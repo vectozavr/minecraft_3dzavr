@@ -76,23 +76,23 @@ void Player::update() {
         // change 'selectedBlock'
         selectedBlock = static_cast<Cube::Type>((int)selectedBlock - 1);
     }
-    if(screen.isButtonTapped(sf::Mouse::Button::Left)) {
+    if(screen.isButtonTapped(sf::Mouse::Button::Right)) {
         auto rayCast = world.rayCast(camera.position(), camera.position() + camera.lookAt()*10);
         Point4D cubePoint = rayCast.second.pos() + rayCast.second.norm();
         map.addCube(selectedBlock, round(cubePoint.x/2), round(cubePoint.y/2), round(cubePoint.z/2));
 
-        world["player_hand"].a_translate("add_cube", camera.lookAt(), 0.08, Animation::None, Animation::cos);
-        world["player_hand"].a_wait("add_cube", 0);
-        world["player_hand"].a_translate("add_cube", -camera.lookAt(), 0.08, Animation::None, Animation::cos);
+        //world["player_hand"].a_translate("add_or_remove_cube", camera.lookAt(), 0.08, Animation::None, Animation::cos);
+        //world["player_hand"].a_wait("add_or_remove_cube", 0);
+        //world["player_hand"].a_translateToPoint("add_or_remove_cube", hitBox().position() + Point4D{-1.5, 0, 0.7}, 0.08, Animation::None, Animation::cos);
     }
-    if(screen.isButtonTapped(sf::Mouse::Button::Right)) {
+    if(screen.isButtonTapped(sf::Mouse::Button::Left)) {
         auto rayCast = world.rayCast(camera.position(), camera.position() + camera.lookAt()*10);
         Point4D cubePoint = rayCast.second.pos() - rayCast.second.norm();
         map.removeCube(round(cubePoint.x/2), round(cubePoint.y/2), round(cubePoint.z/2));
 
-        world["player_hand"].a_translate("add_cube", camera.lookAt(), 0.08, Animation::None, Animation::cos);
-        world["player_hand"].a_wait("add_cube", 0);
-        world["player_hand"].a_translate("add_cube", -camera.lookAt(), 0.08, Animation::None, Animation::cos);
+        //world["player_hand"].a_translate("add_or_remove_cube", camera.lookAt(), 0.08, Animation::None, Animation::cos);
+        //world["player_hand"].a_wait("add_or_remove_cube", 0);
+        //world["player_hand"].a_translateToPoint("add_or_remove_cube", hitBox().position() + Point4D{-1.5, 0, 0.7}, 0.08, Animation::None, Animation::cos);
     }
 
 }
