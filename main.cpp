@@ -42,21 +42,23 @@ void Minecraft::start() {
     world.loadObj("../obj/cube.obj", "point", {0.1, 0.1, 0.1});
     world["point"].setColor({255, 0, 0});
 
-    map.addCube(Cube::stone, 1, 1);
-    map.addCube(Cube::glass, 2, 1);
-    map.addCube(Cube::water, 3, 1);
-    map.addCube(Cube::sand, 4, 1);
-    map.addCube(Cube::earth, 5, 1);
-    map.addCube(Cube::grass, 6, 1);
-    map.addCube(Cube::wood, 7, 1);
-    map.addCube(Cube::snow, 8, 1);
-//
-    for(int i = -10; i < 10; i++) {
-        for(int j = -10; j < 10; j++) {
-            for(int k = 0; k < 1; k++)
-                map.addCube(Cube::earth, i, k, j);
-        }
-    }
+    //map.addCube(Cube::stone, 1, 1);
+    //map.addCube(Cube::glass, 2, 1);
+    //map.addCube(Cube::water, 3, 1);
+    //map.addCube(Cube::sand, 4, 1);
+    //map.addCube(Cube::earth, 5, 1);
+    //map.addCube(Cube::grass, 6, 1);
+    //map.addCube(Cube::wood, 7, 1);
+    //map.addCube(Cube::snow, 8, 1);
+
+    //for(int i = -10; i < 10; i++) {
+    //    for(int j = -10; j < 10; j++) {
+    //        for(int k = 0; k < 1; k++)
+    //            map.addCube(Cube::earth, i, k, j);
+    //    }
+    //}
+
+    map.loadMap("../maps/map_test");
 
 }
 
@@ -79,6 +81,9 @@ void Minecraft::update(double elapsedTime) {
 
     if(screen.isKeyTapped(sf::Keyboard::E))
         switchCamera();
+
+    if(screen.isKeyTapped(sf::Keyboard::M))
+        map.saveMap("../maps/map_test");
 
     //Line line(camera.position(), camera.position() + camera.lookAt()*10);
 
@@ -107,6 +112,7 @@ int main() {
     //game.create(2048, 1152);
     game.create(3072, 1920);
     //game.create(3840, 2160);
+
 
     /*
     std::map<std::string, std::vector<double>> map_of_vectors;
