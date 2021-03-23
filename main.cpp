@@ -79,7 +79,7 @@ void Minecraft::update(double elapsedTime) {
     if(music.getStatus() != sf::Sound::Status::Playing) {
         int soundNum = round((double) rand() / RAND_MAX * 8) + 1; // random number from 1 to 9
         music.setBuffer(*ResourceManager::loadSoundBuffer("../sound/music/music" + std::to_string(soundNum) + ".ogg"));
-        music.setVolume(10);
+        music.setVolume(15);
         music.play();
     }
 }

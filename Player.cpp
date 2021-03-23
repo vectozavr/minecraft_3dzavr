@@ -189,4 +189,11 @@ void Player::update() {
         }
     }
 
+    if((oldVelocity - hitBox().velocity()).abs() > 30) {
+        fall.setBuffer(*ResourceManager::loadSoundBuffer("../sound/fallbig.ogg"));
+        //fall.setVolume(30);
+        fall.play();
+    }
+
+    oldVelocity = hitBox().velocity();
 }

@@ -31,8 +31,11 @@ private:
     // sounds
     sf::Sound addBlock;
     sf::Sound removeBlock;
-
     sf::Sound walk;
+    sf::Sound fall;
+
+    Point4D oldVelocity;
+
 
 public:
     Player(Camera& camera, World& world, Screen& screen, Map& map) : camera(camera), world(world), screen(screen), map(map) {
