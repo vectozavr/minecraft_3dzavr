@@ -11,7 +11,7 @@ Simple implementation of game [Minecraft](https://www.minecraft.net/) using [3dz
     openal: https://openal.org/downloads/
    
 
-2) Install SFML on your computer:
+2) Install SFML on your computer (<b>The compiler versions have to match 100%</b>):
    
     sfml: https://www.sfml-dev.org/download.php
    
