@@ -35,8 +35,6 @@ private:
     sf::Sound fall;
 
     Point4D oldVelocity;
-
-
 public:
     Player(Camera& camera, World& world, Screen& screen, Map& map) : camera(camera), world(world), screen(screen), map(map) {
         world.loadObj("../obj/cube.obj", "player",{0.5, 1.9, 0.5});
@@ -54,6 +52,16 @@ public:
         hitBox().attach(&world["player_hand"]);
         hitBox().setVisible(false);
         world["player_hand"].rotate({-M_PI/10, 0, M_PI/6});
+
+        world["player_hand"].setVisible(false);
+
+        world.loadObj("../obj/cube.obj", "cube_in_hand");
+        world["cube_in_hand"].setCollider(false);
+        world["cube_in_hand"].translateToPoint(world["player_hand"].position() + Point4D{-1.5, -1, 0.7});
+        world["cube_in_hand"].rotate({0, M_PI/10, 0});
+        world["player_hand"].attach(&world["cube_in_hand"]);
+
+        world["cube_in_hand"].setColor(Cube::cubeColor(selectedBlock));
     }
 
     void update();

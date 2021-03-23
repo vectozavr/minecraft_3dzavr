@@ -25,35 +25,10 @@ public:
 private:
     Type type;
 public:
+    static sf::Color cubeColor(Type t);
+
     explicit Cube(Type t, int posX = 0, int posY = 0, int posZ = 0) : type(t){
-        switch (t) {
-            case grass:
-                c_color = sf::Color(122, 255, 127);
-                break;
-            case sand:
-                c_color = sf::Color(255, 235, 153);
-                break;
-            case glass:
-                c_color = sf::Color(255, 255, 255, 50);
-                break;
-            case water:
-                c_color = sf::Color(120, 147, 255, 100);
-                break;
-            case stone:
-                c_color = sf::Color(148, 148, 148);
-                break;
-            case earth:
-                c_color = sf::Color(153, 124, 86);
-                break;
-            case wood:
-                c_color = sf::Color(117, 74, 39);
-                break;
-            case snow:
-                c_color = sf::Color(255, 255, 255);
-                break;
-            default:
-                c_color = sf::Color(255, 245, 194);
-        }
+        c_color = Cube::cubeColor(t);
         loadObj("../obj/cube.obj");
         translate(Point4D{(double)posX*2, (double)posY*2, (double)posZ*2});
     }

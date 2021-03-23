@@ -38,6 +38,8 @@ public:
     void exit();
     void setCameraMode(CameraMode mode);
     void debugText(bool value) { b_debugText = value; }
+
+    virtual void gui(){}
 };
 
 

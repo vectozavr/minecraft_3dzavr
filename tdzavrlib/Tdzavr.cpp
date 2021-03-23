@@ -96,7 +96,7 @@ void Tdzavr::create(int screenWidth, int screenHeight, const std::string &name, 
             std::to_string(Time::fps()) +
             " fps \n" + std::to_string((int) triPerSec) + " tris/s");
         }
-
+        gui();
         screen.display();
     }
     exit();

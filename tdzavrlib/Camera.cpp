@@ -331,6 +331,11 @@ void Camera::rotateRelativePoint(const Point4D &s, double rx, double ry, double 
 
     // After rotation we translate XYZ by vector -r2 and recalculate position
     p_eye = s + r2;
+
+    if(v_attached.empty())
+        return;
+    for(auto& attached : v_attached)
+        attached->rotateRelativePoint(s, {rx, ry, rz});
 }
 
 void Camera::rotateRelativePoint(const Point4D &s, const Point4D &r) {
@@ -346,6 +351,11 @@ void Camera::rotateRelativePoint(const Point4D &s, const Point4D &v, double r) {
 
     // After rotation we translate XYZ by vector -r2 and recalculate position
     p_eye = s + r2;
+
+    if(v_attached.empty())
+        return;
+    for(auto& attached : v_attached)
+        attached->rotateRelativePoint(s, v, r);
 }
 
 void Camera::attractToPoint(const Point4D &point, double r) {

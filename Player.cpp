@@ -30,7 +30,9 @@ void Player::update() {
         camera.a_stopAllAnimations();
         camera.a_translateToPoint("init", hitBox().position() + Point4D{0, 1.8, 0}, 0.15, Animation::None, Animation::cos);
     }
- 
+
+    auto rayToFloor = world.rayCast(hitBox().position(), hitBox().position() + Point4D{0, -5, 0});
+
     // Left and right
     if (Screen::isKeyPressed(sf::Keyboard::A))
         hitBox().translate(camera.left()*Time::deltaTime()*walkSpeed);
@@ -48,7 +50,7 @@ void Player::update() {
     if (Screen::isKeyPressed(sf::Keyboard::LShift))
         hitBox().translate(Point4D{0, -1, 0}*Time::deltaTime()*walkSpeed);
 
-    if (Screen::isKeyPressed(sf::Keyboard::Space) && hitBox().inCollision()) {
+    if (Screen::isKeyPressed(sf::Keyboard::Space) && hitBox().inCollision() && (hitBox().position() - rayToFloor.first).abs() < 6) {
         hitBox().setVelocity(hitBox().velocity() + Point4D{0, sqrt(2 * g * jumpHeight), 0});
     }
 
@@ -73,6 +75,7 @@ void Player::update() {
         // change 'selectedBlock'
         selectedBlock = static_cast<Cube::Type>(((int)selectedBlock + 1)%(int)Cube::Type::none);
         Log::log("selected block " + std::to_string(selectedBlock));
+        world["cube_in_hand"].setColor(Cube::cubeColor(selectedBlock));
     }
     if (screen.isKeyTapped(sf::Keyboard::Left)) {
         // change 'selectedBlock'
@@ -83,6 +86,7 @@ void Player::update() {
             selectedBlock = static_cast<Cube::Type>((int)Cube::Type::none-1);
             Log::log("selected block " + std::to_string(selectedBlock));
         }
+        world["cube_in_hand"].setColor(Cube::cubeColor(selectedBlock));
     }
     if(screen.isButtonTapped(sf::Mouse::Button::Right)) {
         auto rayCast = world.rayCast(camera.position(), camera.position() + camera.lookAt()*10);
@@ -180,8 +184,7 @@ void Player::update() {
     }
 
     if(inRunning && hitBox().inCollision() && walk.getStatus() != sf::Sound::Status::Playing) {
-        auto rayCast = world.rayCast(camera.position(), camera.position() + Point4D{0, -5, 0});
-        if((camera.position() - rayCast.first).abs() < 5) {
+        if((hitBox().position() - rayToFloor.first).abs() < 2) {
             int soundNum = round((double)rand() / RAND_MAX*5) + 1;
             walk.setBuffer(*ResourceManager::loadSoundBuffer("../sound/stonestep" + std::to_string(soundNum) + ".ogg"));
             walk.setVolume(30);
