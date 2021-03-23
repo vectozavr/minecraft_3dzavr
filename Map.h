@@ -24,10 +24,12 @@ public:
     explicit Map(World& world): world(world) {}
 
     void addCube(Cube::Type t, int posX = 0, int posY = 0, int posZ = 0);
-    void removeCube(int posX, int posY, int posZ);
+    Cube::Type removeCube(int posX, int posY, int posZ);
 
     void loadMap(const std::string& mapName);
     void saveMap(const std::string& mapName);
+
+    void init();
 };
 
 

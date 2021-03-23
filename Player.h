@@ -5,6 +5,7 @@
 #ifndef MINECRAFT_3DZAVR_PLAYER_H
 #define MINECRAFT_3DZAVR_PLAYER_H
 
+#include <SFML/Audio/Sound.hpp>
 #include "tdzavrlib/Mesh.h"
 #include "tdzavrlib/Camera.h"
 #include "tdzavrlib/World.h"
@@ -27,10 +28,16 @@ private:
 
     Cube::Type selectedBlock = Cube::Type::stone;
 
+    // sounds
+    sf::Sound addBlock;
+    sf::Sound removeBlock;
+
+    sf::Sound walk;
+
 public:
     Player(Camera& camera, World& world, Screen& screen, Map& map) : camera(camera), world(world), screen(screen), map(map) {
         world.loadObj("../obj/cube.obj", "player",{0.5, 1.9, 0.5});
-        hitBox().translate({0, 5, 0});
+        hitBox().translate({0, 6, 0});
         hitBox().setCollision(true);
         hitBox().setAcceleration({0, -g, 0});
 

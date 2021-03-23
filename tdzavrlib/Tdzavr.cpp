@@ -6,7 +6,7 @@
 #include "utils/Time.h"
 #include <iostream>
 #include "CameraMesh.h"
-#include "utils/ResourceManager.h"
+#include "ResourceManager.h"
 #include "physics/Solver.h"
 
 void Tdzavr::create(int screenWidth, int screenHeight, const std::string &name, bool verticalSync, sf::Color background) {

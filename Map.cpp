@@ -12,16 +12,21 @@ void Map::addCube(Cube::Type t, int posX, int posY, int posZ) {
     cubes.emplace_back(t, Pos{posX, posY, posZ});
 }
 
-void Map::removeCube(int posX, int posY, int posZ) {
+Cube::Type Map::removeCube(int posX, int posY, int posZ) {
     world.removeMesh("cube_X_" + std::to_string(posX) + "_Y_" + std::to_string(posY) + "_Z_" + std::to_string(posZ));
 
     // delete cube. Yes, this is not very effective way to do this but it is 3am and I dont know what I am doing
     auto it = cubes.begin();
     while (it != cubes.end())
-        if(it->second.x == posX && it->second.y == posY && it->second.z == posZ)
+        if(it->second.x == posX && it->second.y == posY && it->second.z == posZ) {
+            Cube::Type t = it->first;
             cubes.erase(it);
+            return t;
+        }
         else
             it++;
+
+    return Cube::none;
 }
 
 void Map::saveMap(const std::string& mapName) {
@@ -43,4 +48,22 @@ void Map::loadMap(const std::string &mapName) {
     }
 
     infile.close();
+}
+
+void Map::init() {
+    addCube(Cube::stone, 1, 1);
+    addCube(Cube::glass, 2, 1);
+    addCube(Cube::water, 3, 1);
+    addCube(Cube::sand, 4, 1);
+    addCube(Cube::earth, 5, 1);
+    addCube(Cube::grass, 6, 1);
+    addCube(Cube::wood, 7, 1);
+    addCube(Cube::snow, 8, 1);
+
+    for(int i = -10; i < 10; i++) {
+        for(int j = -10; j < 10; j++) {
+            for(int k = 0; k < 1; k++)
+                addCube(Cube::earth, i, k, j);
+        }
+    }
 }
