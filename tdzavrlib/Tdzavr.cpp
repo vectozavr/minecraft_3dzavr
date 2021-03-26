@@ -32,70 +32,76 @@ void Tdzavr::create(int screenWidth, int screenHeight, const std::string &name, 
          * Here we project all tris for each mesh from world._objects.
          * When we call camera.project(m.second),
          */
-        camera.record();
-        for(auto& m : world.objects()) {
-            m.second.a_update();
-            camera.project(m.second, screen.mode());
 
-            m.second.updatePhysicsState();
-            // isCollision detection:
-            if(m.second.isCollision()) {
-                m.second.setInCollision(false);
-                for (auto &obj : world.objects()) {
-                    if (obj.first != m.first && obj.second.isCollider()) {
-                        std::pair<bool, Simplex> gjk = m.second.checkGJKCollision(obj.second);
-                        if (gjk.first) {
-                            CollisionPoint epa = m.second.EPA(gjk.second, obj.second);
-                            Solver::solveCollision(m.second, obj.second, epa);
+        // sometimes we dont need to update physics world
+        // (for example in menu or while pause)
+        // hence we can set 'b_updateWorld' equal to false in setUpdateWorld(bool):
+        if(b_updateWorld) {
+            camera.record();
+            for (auto &m : world.objects()) {
+                m.second.a_update();
+                camera.project(m.second, screen.mode());
+
+                m.second.updatePhysicsState();
+                // isCollision detection:
+                if (m.second.isCollision()) {
+                    m.second.setInCollision(false);
+                    for (auto &obj : world.objects()) {
+                        if (obj.first != m.first && obj.second.isCollider()) {
+                            std::pair<bool, Simplex> gjk = m.second.checkGJKCollision(obj.second);
+                            if (gjk.first) {
+                                CollisionPoint epa = m.second.EPA(gjk.second, obj.second);
+                                Solver::solveCollision(m.second, obj.second, epa);
+                            }
                         }
                     }
                 }
+
             }
 
+            // draw projected mesh
+            if (cameraMode == LocalCamera) {
+                // Draw from camera view
+                for (auto &t : camera.sorted())
+                    screen.triangle(t);
+            } else {
+                // Draw from the perspective of external observer
+                external_camera.record();
+                Mesh tracedTriangles(camera.tracedTriangles());
+                CameraMesh cameraMesh(camera);
+
+
+                external_camera.project(tracedTriangles, screen.mode());
+                external_camera.project(cameraMesh, screen.mode());
+
+                for (auto &t : external_camera.sorted())
+                    screen.triangle(t);
+            }
+
+            camera.a_update();
+            external_camera.a_update();
+
+            triPerSec = camera.buffSize() * Time::fps();
+
+            if (b_debugText) {
+                Point4D cameraPosition{};
+                double cameraY;
+                if (cameraMode == CameraMode::LocalCamera)
+                    cameraPosition = camera.eye();
+                else
+                    cameraPosition = external_camera.eye();
+
+                screen.debugText(name + "\n\n X: " +
+                                 std::to_string((cameraPosition.x)) + "\n Y: " +
+                                 std::to_string((cameraPosition.y)) + "\n Z: " +
+                                 std::to_string((cameraPosition.z)) + "\n\n" +
+                                 std::to_string(screen.width()) + "x" +
+                                 std::to_string(screen.height()) + "\n" +
+                                 std::to_string(Time::fps()) +
+                                 " fps \n" + std::to_string((int) triPerSec) + " tris/s");
+            }
         }
 
-        // draw projected mesh
-        if(cameraMode == LocalCamera) {
-            // Draw from camera view
-            for (auto &t : camera.sorted())
-                screen.triangle(t);
-        }
-        else {
-            // Draw from the perspective of external observer
-            external_camera.record();
-            Mesh tracedTriangles(camera.tracedTriangles());
-            CameraMesh cameraMesh(camera);
-
-
-            external_camera.project(tracedTriangles, screen.mode());
-            external_camera.project(cameraMesh, screen.mode());
-
-            for (auto &t : external_camera.sorted())
-                screen.triangle(t);
-        }
-
-        camera.a_update();
-        external_camera.a_update();
-
-        triPerSec = camera.buffSize() * Time::fps();
-
-        if(b_debugText) {
-            Point4D cameraPosition{};
-            double cameraY;
-            if (cameraMode == CameraMode::LocalCamera)
-                cameraPosition = camera.eye();
-            else
-                cameraPosition = external_camera.eye();
-
-            screen.debugText(name + "\n\n X: " +
-            std::to_string((cameraPosition.x)) + "\n Y: " +
-            std::to_string((cameraPosition.y)) + "\n Z: " +
-            std::to_string((cameraPosition.z)) + "\n\n" +
-            std::to_string(screen.width()) + "x" +
-            std::to_string(screen.height()) + "\n" +
-            std::to_string(Time::fps()) +
-            " fps \n" + std::to_string((int) triPerSec) + " tris/s");
-        }
         gui();
         screen.display();
     }

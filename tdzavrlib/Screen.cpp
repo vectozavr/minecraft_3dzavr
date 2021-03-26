@@ -35,13 +35,18 @@ void Screen::display() {
     std::string title = name + " (" + std::to_string(Time::fps()) + " fps)";
     window.setTitle(title);
 
-    if(renderVideo)
+    if(renderVideo || makeScreenShoot)
     {
         sf::Texture copyTexture;
         copyTexture.create(window.getSize().x, window.getSize().y);
         copyTexture.update(window);
-        copyTexture.copyToImage().saveToFile("../film/png/" + std::to_string(frame++) + ".png");
+        if(makeScreenShoot)
+            copyTexture.copyToImage().saveToFile("../img/screen.png");
+        else
+            copyTexture.copyToImage().saveToFile("../film/png/" + std::to_string(frame++) + ".png");
+        makeScreenShoot = false;
     }
+
 
     window.display();
 }

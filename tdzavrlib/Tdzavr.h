@@ -26,6 +26,7 @@ protected:
     double triPerSec = 0;
 
     bool b_debugText = true;
+    bool b_updateWorld = true;
 
     CameraMode cameraMode = LocalCamera;
 public:
@@ -38,6 +39,7 @@ public:
     void exit();
     void setCameraMode(CameraMode mode);
     void debugText(bool value) { b_debugText = value; }
+    void setUpdateWorld(bool value) { b_updateWorld = value; }
 
     virtual void gui(){}
 };
