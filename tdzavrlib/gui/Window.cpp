@@ -5,7 +5,7 @@
 #include "Window.h"
 #include "ResourceManager.h"
 
-void Window::addButton(int x, int y, int w, int h, std::function<void()> click, const std::string &text, int sx, int sy,
+void Window::addButton(int x, int y, int w, int h, std::function<void()> click, const std::string &text, double sx, double sy,
                        const std::string &texture, tPos usualState, tPos selectedState, tPos pressedState,
                        const std::string& font, sf::Color textColor, const std::string& clickSound) {
     buttons.push_back(Button{x, y, w, h, click, text, sx, sy, texture, usualState, selectedState, pressedState, font, textColor, clickSound});
@@ -41,7 +41,7 @@ void Window::update(Screen& screen) {
     prevMousePosition = mousePos;
 }
 
-void Window::setBackgroundTexture(const std::string &texture, int sx, int sy, int w, int h) {
+void Window::setBackgroundTexture(const std::string &texture, double sx, double sy, int w, int h) {
     s_backTexture = texture;
     sf::Texture* t = ResourceManager::loadTexture(s_backTexture);
     t->setRepeated(true);

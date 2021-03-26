@@ -22,14 +22,14 @@ public:
 
     void addButton(int x, int y, int w, int h,
                    std::function<void()> click,
-                   const std::string& text = "button", int sx = 1, int sy = 1,
+                   const std::string& text = "button", double sx = 1, double sy = 1,
                    const std::string& texture = "", tPos usualState = {}, tPos selectedState = {}, tPos pressedState = {},
                    const std::string& font = "../tdzavrlib/fonts/Roboto-Medium.ttf", sf::Color textColor = {255, 255, 255}, const std::string& clickSound = "");
 
     [[nodiscard]] std::string title() const { return s_name; }
     void title(const std::string& title) { s_name = title; }
 
-    void setBackgroundTexture(const std::string& texture, int sx = 1, int sy = 1, int w = 1920, int h = 1080);
+    void setBackgroundTexture(const std::string& texture, double sx = 1, double sy = 1, int w = 1920, int h = 1080);
 
     void update(Screen& screen);
 };

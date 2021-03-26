@@ -64,9 +64,8 @@ void Minecraft::start() {
     setUpdateWorld(false);
 
     // windows init:
-    mainMenu.title("Main menu"); mainMenu.setBackgroundTexture("../textures/background.png", 30, 30, screen.width(), screen.height());
-    settings.title("Settings"); settings.setBackgroundTexture("../textures/background.png");
-    about.title("About"); about.setBackgroundTexture("../textures/background.png");
+    mainMenu.title("Main menu");
+    mainMenu.setBackgroundTexture("../textures/back.png", 1.1, 1.1, screen.width(), screen.height());
 
     mainMenu.addButton(screen.width()/2, 200, 200, 20, [this] () { this->play(); }, "Play", 5, 5, "../textures/gui.png", {0, 66}, {0, 86}, {0, 46}, "../tdzavrlib/fonts/Roboto-Medium.ttf", {255, 255, 255}, "../sound/click.ogg");
     mainMenu.addButton(screen.width()/2, 350, 200, 20, [this] () { this->map.saveMap("../maps/map_test"); }, "Save map", 5, 5, "../textures/gui.png", {0, 66}, {0, 86}, {0, 46}, "../tdzavrlib/fonts/Roboto-Medium.ttf", {255, 255, 255}, "../sound/click.ogg");
@@ -147,9 +146,9 @@ void Minecraft::play() {
 
 int main(int argc, char* argv[]) {
     Minecraft game;
-    //game.create(1920, 1080);
+    game.create(1920, 1080);
     //game.create(2048, 1152);
-    game.create(3072, 1920, "Minecraft", true);
+    //game.create(3072, 1920, "Minecraft", true);
     //game.create(3840, 2160);
 
     return 0;

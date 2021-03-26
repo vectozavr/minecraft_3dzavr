@@ -25,8 +25,8 @@ struct Button
 
     std::string s_text;
 
-    int sx;
-    int sy;
+    double sx;
+    double sy;
 
     std::string s_texture;
     tPos usualState;
