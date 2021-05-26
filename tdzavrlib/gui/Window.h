@@ -5,6 +5,8 @@
 #ifndef MINECRAFT_3DZAVR_WINDOW_H
 #define MINECRAFT_3DZAVR_WINDOW_H
 
+#include <utility>
+
 #include "Button.h"
 #include "Screen.h"
 
@@ -18,7 +20,7 @@ private:
 
     Point4D prevMousePosition;
 public:
-    explicit Window(const std::string& name = "Menu", const std::string& backTexture = "") : s_name(name), s_backTexture(backTexture){}
+    explicit Window(std::string name = "Menu", std::string  backTexture = "") : s_name(std::move(name)), s_backTexture(std::move(backTexture)){}
 
     void addButton(int x, int y, int w, int h,
                    std::function<void()> click,
@@ -31,7 +33,7 @@ public:
 
     void setBackgroundTexture(const std::string& texture, double sx = 1, double sy = 1, int w = 1920, int h = 1080);
 
-    void update(Screen& screen);
+    void update(const std::shared_ptr<Screen>& screen);
 };
 
 

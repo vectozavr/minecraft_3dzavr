@@ -7,6 +7,7 @@
 
 #include "tdzavrlib/World.h"
 #include "Cube.h"
+#include <utility>
 #include <vector>
 
 struct Pos {
@@ -15,13 +16,13 @@ struct Pos {
     int z = 0;
 };
 
-class Map {
+class Map : public World {
 private:
-    World& world;
+    std::shared_ptr<World> world;
 
-    std::vector<std::pair<Cube::Type, Pos>> cubes;
+    std::map<std::string, std::pair<Cube::Type, Pos>> cubes{};
 public:
-    explicit Map(World& world): world(world) {}
+    explicit Map(std::shared_ptr<World> world): world(std::move(world)) {}
 
     void addCube(Cube::Type t, int posX = 0, int posY = 0, int posZ = 0);
     Cube::Type removeCube(int posX, int posY, int posZ);

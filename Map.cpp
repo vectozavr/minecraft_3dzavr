@@ -7,15 +7,21 @@
 #include <fstream>
 
 void Map::addCube(Cube::Type t, int posX, int posY, int posZ) {
-    world.addMesh(Cube(t, posX, posY, posZ), "cube_X_" + std::to_string(posX) + "_Y_" + std::to_string(posY) + "_Z_" + std::to_string(posZ));
+    world->addMesh(std::make_shared<Cube>(t, posX, posY, posZ), "cube_X_" + std::to_string(posX) + "_Y_" + std::to_string(posY) + "_Z_" + std::to_string(posZ));
 
-    cubes.emplace_back(t, Pos{posX, posY, posZ});
+    cubes.insert({"cube_X_" + std::to_string(posX) + "_Y_" + std::to_string(posY) + "_Z_" + std::to_string(posZ), {t, Pos{posX, posY, posZ}}});
+
+    //world["cube_X_" + std::to_string(posX) + "_Y_" + std::to_string(posY) + "_Z_" + std::to_string(posZ)].a_showCreation("appear", 0.2);
 }
 
 Cube::Type Map::removeCube(int posX, int posY, int posZ) {
-    world.removeMesh("cube_X_" + std::to_string(posX) + "_Y_" + std::to_string(posY) + "_Z_" + std::to_string(posZ));
+
+    std::string cubeName = "cube_X_" + std::to_string(posX) + "_Y_" + std::to_string(posY) + "_Z_" + std::to_string(posZ);
+
+    world->removeMesh(cubeName);
 
     // delete cube. Yes, this is not very effective way to do this but it is 3am and I dont know what I am doing
+    /*
     auto it = cubes.begin();
     while (it != cubes.end())
         if(it->second.x == posX && it->second.y == posY && it->second.z == posZ) {
@@ -25,7 +31,13 @@ Cube::Type Map::removeCube(int posX, int posY, int posZ) {
         }
         else
             it++;
+    */
 
+    if(cubes.count(cubeName)) {
+        Cube::Type t = cubes.at(cubeName).first;
+        cubes.erase(cubeName);
+        return t;
+    }
     return Cube::none;
 }
 
@@ -33,7 +45,7 @@ void Map::saveMap(const std::string& mapName) {
     std::ofstream outfile (mapName, std::fstream::trunc);
 
     for(auto& cube : cubes)
-        outfile << cube.first << "\t" << cube.second.x << "\t" << cube.second.y << "\t" << cube.second.z << std::endl;
+        outfile << cube.second.first << "\t" << cube.second.second.x << "\t" << cube.second.second.y << "\t" << cube.second.second.z << std::endl;
 
     outfile.close();
 }

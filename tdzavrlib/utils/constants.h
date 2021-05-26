@@ -1,0 +1,10 @@
+//
+// Created by Иван Ильин on 25.05.2021.
+//
+
+#ifndef MINECRAFT_3DZAVR_CONSTANTS_H
+#define MINECRAFT_3DZAVR_CONSTANTS_H
+
+
+
+#endif //MINECRAFT_3DZAVR_CONSTANTS_H

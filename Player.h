@@ -6,23 +6,25 @@
 #define MINECRAFT_3DZAVR_PLAYER_H
 
 #include <SFML/Audio/Sound.hpp>
+#include <utility>
 #include "tdzavrlib/Mesh.h"
 #include "tdzavrlib/Camera.h"
 #include "tdzavrlib/World.h"
 #include "Map.h"
 
-class Player {
+class Player : public Mesh{
 private:
-    double health = 100;
+    double _health = 100;
     double jumpHeight = 1.5;
     double walkSpeed = 7;
 
     double g = 35;
 
-    Camera& camera;
-    World& world;
-    Screen& screen;
-    Map& map;
+    std::shared_ptr<Camera> _camera;
+    std::shared_ptr<Screen> _screen;
+
+    std::shared_ptr<World> _world;
+    std::shared_ptr<Map> _map;
 
     bool inRunning = false;
 
@@ -35,38 +37,58 @@ private:
     sf::Sound fall;
 
     Point4D oldVelocity;
+
+    std::string _name = "Ivan";
 public:
-    Player(Camera& camera, World& world, Screen& screen, Map& map) : camera(camera), world(world), screen(screen), map(map) {
-        world.loadObj("../obj/cube.obj", "player",{0.5, 1.9, 0.5});
-        hitBox().translate({0, 6, 0});
-        hitBox().setCollision(true);
-        hitBox().setAcceleration({0, -g, 0});
-
-        camera.translateToPoint(hitBox().position() + Point4D{0, 1.8, 0});
-        hitBox().attach(reinterpret_cast<Mesh *>(&camera));
-
-        world.loadObj("../obj/cube.obj", "player_hand",{0.3, 0.3, 0.8});
-        world["player_hand"].setCollider(false);
-        world["player_hand"].translateToPoint(hitBox().position() + Point4D{-1.5, 0, 0.7});
-
-        hitBox().attach(&world["player_hand"]);
-        hitBox().setVisible(false);
-        world["player_hand"].rotate({-M_PI/10, 0, M_PI/6});
-
-        world["player_hand"].setVisible(false);
-
-        world.loadObj("../obj/cube.obj", "cube_in_hand");
-        world["cube_in_hand"].setCollider(false);
-        world["cube_in_hand"].translateToPoint(world["player_hand"].position() + Point4D{-1.5, -1, 0.7});
-        world["cube_in_hand"].rotate({0, M_PI/10, 0});
-        world["player_hand"].attach(&world["cube_in_hand"]);
-
-        world["cube_in_hand"].setColor(Cube::cubeColor(selectedBlock));
-    }
+    Player() {
+        loadObj("../obj/cube.obj", {0.5, 1.9, 0.5});
+        setAcceleration({0, -g, 0});
+        setCollision(true);
+        setVisible(false);
+    };
 
     void update();
 
-    Mesh& hitBox() { return world["player"]; }
+    void attachCamera(std::shared_ptr<Camera>& camera, std::shared_ptr<Screen> screen) {
+        _camera = camera;
+        _screen = std::move(screen);
+
+        camera->translateToPoint(position() + Point4D{0, 1.8, 0});
+        this->attach(camera);
+    }
+
+    void attachWorld(const std::shared_ptr<World>& world, const std::shared_ptr<Map>& map, const Point4D& pos = {0, 6, 0}) {
+        _world = world;
+        _map = map;
+
+        translate(pos);
+
+        _world->loadObj("../obj/cube.obj", name() + "_hand",{0.3, 0.3, 0.8});
+        (*_world)[name() + "_hand"]->setCollider(false);
+        (*_world)[name() + "_hand"]->translateToPoint(position() + Point4D{-1.5, 0, 0.7});
+
+
+        attach((*_world)[name() + "_hand"]);
+        (*_world)[name() + "_hand"]->rotate({-M_PI/10, 0, M_PI/6});
+
+        (*_world)[name() + "_hand"]->setVisible(false);
+
+        _world->loadObj("../obj/cube.obj", name() + "cube_in_hand");
+        (*_world)[name() + "cube_in_hand"]->setCollider(false);
+        (*_world)[name() + "cube_in_hand"]->translateToPoint((*_world)[name() + "_hand"]->position() + Point4D{-1.5, -1, 0.7});
+        (*_world)[name() + "cube_in_hand"]->rotate({0, M_PI/10, 0});
+        (*_world)[name() + "_hand"]->attach((*_world)[name() + "cube_in_hand"]);
+
+        (*_world)[name() + "cube_in_hand"]->setColor(Cube::cubeColor(selectedBlock));
+    }
+
+    void setHealth(double h) {
+        _health = h;
+    }
+
+    [[nodiscard]] double health() const { return _health; }
+    [[nodiscard]] std::string name() const { return "Player_" + _name; }
+
 };
 
 

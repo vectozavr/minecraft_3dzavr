@@ -23,7 +23,7 @@ Mesh &Mesh::operator*=(const Matrix4x4 &matrix4X4) {
     return *this;
 }
 
-Mesh &Mesh::loadObj(const std::string& filename) {
+Mesh &Mesh::loadObj(const std::string& filename, Point4D scale) {
 
     ifstream file(filename);
 
@@ -61,6 +61,8 @@ Mesh &Mesh::loadObj(const std::string& filename) {
     }
 
     file.close();
+
+    this->scale(scale);
 
     return *this;
 }
@@ -207,7 +209,8 @@ void Mesh::attractToPoint(const Point4D &point, double r) {
 }
 
 void Mesh::translateToPoint(const Point4D &point) {
-    p_position = point;
+    //p_position = point;
+    translate(point - p_position);
 }
 
 void Mesh::decompose(double value) {

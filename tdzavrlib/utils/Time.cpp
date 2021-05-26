@@ -5,7 +5,7 @@
 #include "Time.h"
 #include <chrono>
 //#define FIXED_STEP (1.0/60.0)
-#define BIG_STEP (1.0/10.0)
+#define BIG_STEP (1.0/15.0)
 
 using namespace std::chrono;
 

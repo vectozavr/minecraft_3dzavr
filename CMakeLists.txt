@@ -60,9 +60,22 @@ add_library(3dzavr STATIC
         tdzavrlib/gui/Button.cpp
         tdzavrlib/gui/Button.h
         tdzavrlib/gui/Window.cpp
-        tdzavrlib/gui/Window.h)
+        tdzavrlib/gui/Window.h
+        tdzavrlib/network/ClientUDP.cpp
+        tdzavrlib/network/ClientUDP.h
+        tdzavrlib/network/MsgType.cpp
+        tdzavrlib/network/MsgType.h
+        tdzavrlib/network/ReliableMsg.cpp
+        tdzavrlib/network/ReliableMsg.h
+        tdzavrlib/network/ServerUDP.cpp
+        tdzavrlib/network/ServerUDP.h
+        tdzavrlib/network/UDPConnection.cpp
+        tdzavrlib/network/UDPConnection.h
+        tdzavrlib/network/UDPSocket.cpp
+        tdzavrlib/network/UDPSocket.h
+        tdzavrlib/network/config.h tdzavrlib/animation/AFunction.h tdzavrlib/utils/constants.h)
 
-add_executable(minecraft_3dzavr main.cpp Player.cpp Player.h Cube.cpp Cube.h Map.cpp Map.h)
+add_executable(minecraft_3dzavr main.cpp Player.cpp Player.h Cube.cpp Cube.h Map.cpp Map.h Client.cpp Client.h Server.cpp Server.h)
 
 if(${APPLE})
     include_directories(/usr/local/include)
