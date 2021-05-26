@@ -62,6 +62,8 @@ void ServerUDP::stop()
     _socket.unbind();
     _working = false;
 
+    processStop();
+
     Log::log("ServerUDP: the server was killed.");
 }
 

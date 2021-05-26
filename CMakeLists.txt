@@ -73,7 +73,8 @@ add_library(3dzavr STATIC
         tdzavrlib/network/UDPConnection.h
         tdzavrlib/network/UDPSocket.cpp
         tdzavrlib/network/UDPSocket.h
-        tdzavrlib/network/config.h tdzavrlib/animation/AFunction.h tdzavrlib/utils/constants.h)
+        tdzavrlib/network/config.h
+        tdzavrlib/animation/AFunction.h)
 
 add_executable(minecraft_3dzavr main.cpp Player.cpp Player.h Cube.cpp Cube.h Map.cpp Map.h Client.cpp Client.h Server.cpp Server.h)
 

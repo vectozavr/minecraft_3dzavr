@@ -38,9 +38,9 @@ public:
     virtual void processNewClient(sf::Packet& packet){};
     virtual void processDisconnect(sf::Uint16 targetId){};
 
-    virtual void processDisconnected(){};
-
     virtual void processCustomPacket(MsgType type, sf::Packet& packet){};
+
+    virtual void processDisconnected(){};
 };
 
 

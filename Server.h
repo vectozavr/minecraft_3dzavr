@@ -22,6 +22,8 @@ public:
     void processDisconnect(sf::Uint16 senderId) override;
 
     void processCustomPacket(MsgType type, sf::Packet& packet) override;
+
+    void processStop() override;
 };
 
 

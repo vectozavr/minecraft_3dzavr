@@ -58,3 +58,8 @@ void Server::processDisconnect(sf::Uint16 senderId) {
 void Server::processCustomPacket(MsgType type, sf::Packet& packet) {
     ServerUDP::processCustomPacket(type, packet);
 }
+
+void Server::processStop() {
+    for (auto it = _players.begin(); it != _players.end();)
+        _players.erase(it++);
+}

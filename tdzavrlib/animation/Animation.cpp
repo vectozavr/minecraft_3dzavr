@@ -23,7 +23,7 @@ bool Animation::updateState() {
         _dtime = _time - _timeOld;
     else {
         _time = _timeOld;
-        _intType = linear;
+        //_intType = linear;
     }
 
     switch (_intType) {
