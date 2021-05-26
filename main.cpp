@@ -128,7 +128,23 @@ void Minecraft::start() {
     mainMenu.addButton(screen->width()/2, 500, 200, 20, [this] () { this->map->saveMap("../maps/map_test"); }, "Save map", 5, 5, "../textures/gui.png", {0, 66}, {0, 86}, {0, 46}, "../tdzavrlib/fonts/Roboto-Medium.ttf", {255, 255, 255}, "../sound/click.ogg");
 
 
-    mainMenu.addButton(screen->width()/2, 750, 200, 20, [this] () { this->exit(); }, "Exit", 5, 5, "../textures/gui.png", {0, 66}, {0, 86}, {0, 46}, "../tdzavrlib/fonts/Roboto-Medium.ttf", {255, 255, 255}, "../sound/click.ogg");
+    mainMenu.addButton(screen->width()/2, 750, 200, 20, [this] () { client->disconnect(); server->stop(); this->exit();}, "Exit", 5, 5, "../textures/gui.png", {0, 66}, {0, 86}, {0, 46}, "../tdzavrlib/fonts/Roboto-Medium.ttf", {255, 255, 255}, "../sound/click.ogg");
+
+    // connecting to the server
+    InitNetwork(server, client);
+    // Waiting for connect and updating server if it's same window
+    while (client->isWorking() && !client->connected())
+    {
+        client->update();
+        server->update();
+        Time::update();
+    }
+    // If connect fail - return to menu
+    if (!client->isWorking())
+    {
+        inGame = false;
+        server->stop();
+    }
 }
 
 void Minecraft::update(double elapsedTime) {
@@ -145,10 +161,12 @@ void Minecraft::update(double elapsedTime) {
         inGame = !inGame;
         screen->setMouseCursorVisible(!inGame);
 
+        /*
         if(!inGame) {
             server->stop();
             client->disconnect();
         }
+         */
     }
 
     if(inGame) {
@@ -207,22 +225,6 @@ void Minecraft::gui() {
 
 void Minecraft::play() {
     inGame = true;
-
-    InitNetwork(server, client);
-
-    // Waiting for connect and updating server if it's same window
-    while (client->isWorking() && !client->connected())
-    {
-        client->update();
-        server->update();
-        Time::update();
-    }
-    // If connect fail - return to menu
-    if (!client->isWorking())
-    {
-        inGame = false;
-        server->stop();
-    }
 
     screen->setMouseCursorVisible(!inGame);
 }
