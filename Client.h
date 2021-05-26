@@ -14,10 +14,11 @@ class Client : public ClientUDP {
 private:
     std::shared_ptr<Player> _player;
     std::shared_ptr<World> _world;
+    std::shared_ptr<Map> _map;
 
     std::map<sf::Uint16, std::shared_ptr<Player>> _players{};
 public:
-    Client(std::shared_ptr<Player>  player, std::shared_ptr<World>  world) : _player(std::move(player)), _world(std::move(world)) {};
+    Client(std::shared_ptr<Player>  player, std::shared_ptr<World>  world, std::shared_ptr<Map>  map) : _player(std::move(player)), _world(std::move(world)), _map(std::move(map)) {};
 
     void updatePacket() override;
 
@@ -29,6 +30,9 @@ public:
     void processCustomPacket(MsgType type, sf::Packet& packet) override;
 
     void processDisconnected() override;
+
+    void addCube(Pos pos, Cube::Type type);
+    void removeCube(Pos pos);
 };
 
 

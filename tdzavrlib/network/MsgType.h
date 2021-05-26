@@ -21,6 +21,10 @@ enum class MsgType
     Update,       // update             (client <--- server)
     ClientUpdate, // update             (client ---> server)
     NewClient,    // add new client     (client <--- server)
+
+    // custom
+    AddCube,
+    RemoveCube,
 };
 
 sf::Packet& operator<<(sf::Packet& packet, MsgType type);

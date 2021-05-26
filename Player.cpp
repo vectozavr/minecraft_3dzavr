@@ -97,7 +97,8 @@ void Player::update() {
             if ((rayCast.first - _camera->position()).abs() < 10) {
                 Point4D cubePoint = rayCast.second.pos() + rayCast.second.norm();
                 (*_map).addCube(selectedBlock, round(cubePoint.x / 2), round(cubePoint.y / 2), round(cubePoint.z / 2));
-
+                if(addCubeCallBack)
+                    addCubeCallBack({static_cast<int>(round(cubePoint.x / 2)), static_cast<int>(round(cubePoint.y / 2)), static_cast<int>(round(cubePoint.z / 2))}, selectedBlock);
                 //world["player_hand"].a_translate("add_or_remove_cube", camera.lookAt(), 0.08, Animation::None, Animation::cos);
                 //world["player_hand"].a_wait("add_or_remove_cube", 0);
                 //world["player_hand"].a_translate("add_or_remove_cube", -camera.lookAt(), 0.08, Animation::None, Animation::cos);
@@ -144,7 +145,8 @@ void Player::update() {
             if ((rayCast.first - _camera->position()).abs() < 10) {
                 Point4D cubePoint = rayCast.second.pos() - rayCast.second.norm();
                 Cube::Type t = (*_map).removeCube(round(cubePoint.x / 2), round(cubePoint.y / 2), round(cubePoint.z / 2));
-
+                if(removeCubeCallBack)
+                    removeCubeCallBack({static_cast<int>(round(cubePoint.x / 2)), static_cast<int>(round(cubePoint.y / 2)), static_cast<int>(round(cubePoint.z / 2))});
                 if (t != Cube::none) {
                     //world["player_hand"].a_translate("add_or_remove_cube", camera.lookAt(), 0.08, Animation::None, Animation::cos);
                     //world["player_hand"].a_wait("add_or_remove_cube", 0);

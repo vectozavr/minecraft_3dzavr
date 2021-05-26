@@ -39,6 +39,10 @@ private:
     Point4D oldVelocity;
 
     std::string _name = "Ivan";
+
+    std::function<void(Pos pos, Cube::Type type)> addCubeCallBack;
+    std::function<void(Pos pos)> removeCubeCallBack;
+
 public:
     Player() {
         loadObj("../obj/cube.obj", {0.5, 1.9, 0.5});
@@ -84,6 +88,11 @@ public:
 
     void setHealth(double h) {
         _health = h;
+    }
+
+    void add_removeCubeCallBack(std::function<void(Pos pos, Cube::Type type)> add, std::function<void(Pos pos)> remove) {
+        addCubeCallBack = std::move(add);
+        removeCubeCallBack = std::move(remove);
     }
 
     [[nodiscard]] double health() const { return _health; }

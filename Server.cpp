@@ -3,6 +3,7 @@
 //
 
 #include "Server.h"
+#include "utils/Log.h"
 
 void Server::broadcast() {
     sf::Packet updatePacket;
@@ -55,8 +56,34 @@ void Server::processDisconnect(sf::Uint16 senderId) {
 }
 
 
-void Server::processCustomPacket(MsgType type, sf::Packet& packet) {
-    ServerUDP::processCustomPacket(type, packet);
+void Server::processCustomPacket(MsgType type, sf::Packet& packet, sf::Uint16 senderId) {
+    sf::Packet sendPacket;
+    int buf[3];
+    sf::Uint16 tmp;
+    Cube::Type cubeType;
+
+    switch (type) {
+        case MsgType::AddCube:
+            packet >> tmp >> buf[0] >> buf[1] >> buf[2];
+            sendPacket << MsgType::AddCube << tmp << buf[0] << buf[1] << buf[2];
+            for(auto& _player : _players) {
+                if(senderId != _player.first)
+                    _socket.sendRely(sendPacket, _player.first);
+            }
+
+            Log::log("Server: AddCube.");
+
+            break;
+        case MsgType::RemoveCube:
+            packet >> buf[0] >> buf[1] >> buf[2];
+            sendPacket << MsgType::RemoveCube << buf[0] << buf[1] << buf[2];
+            for(auto& _player : _players) {
+                if(senderId != _player.first)
+                    _socket.sendRely(sendPacket, _player.first);
+            }
+            Log::log("Server: RemoveCube.");
+            break;
+    }
 }
 
 void Server::processStop() {

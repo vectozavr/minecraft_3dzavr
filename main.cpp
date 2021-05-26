@@ -107,7 +107,7 @@ void Minecraft::start() {
     map->loadMap("../maps/map_test");
 
     player = std::make_shared<Player>();
-    client = std::make_shared<Client>(player, world);
+    client = std::make_shared<Client>(player, world, map);
     server = std::make_shared<Server>();
 
     player->attachWorld(world, map);
@@ -116,6 +116,8 @@ void Minecraft::start() {
 
     player->attachCamera(camera, screen);
     world->addMesh(player, player->name());
+
+    player->add_removeCubeCallBack([this] (Pos pos, Cube::Type type) {client->addCube(pos, type); }, [this] (Pos pos) {client->removeCube(pos);});
 
     // windows init:
     mainMenu.title("Main menu");
@@ -168,7 +170,6 @@ void Minecraft::update(double elapsedTime) {
 
     //auto rayCast = world.rayCast(camera.position(), camera.position() + camera.lookAt()*10);
     //world["point"].translateToPoint(rayCast.first);
-
 
     // background sounds and music control
     if(backgroundNoise.getStatus() != sf::Sound::Status::Playing) {
@@ -228,9 +229,9 @@ void Minecraft::play() {
 
 int main(int argc, char* argv[]) {
     Minecraft game;
-    //game.create(1920, 1080, "Minecraft");
+    game.create(1920, 1080, "Minecraft");
     //game.create(2048, 1152, "Minecraft");
-    game.create(3072, 1920, "Minecraft");
+    //game.create(3072, 1920, "Minecraft");
     //game.create(3840, 2160, "Minecraft");
 
     return 0;

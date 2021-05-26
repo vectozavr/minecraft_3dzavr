@@ -3,15 +3,13 @@
 //
 
 #include "Client.h"
+#include "utils/Log.h"
 
 void Client::updatePacket() {
-    std::string name = _player->name();
-
     sf::Packet packet;
     packet << MsgType::ClientUpdate << _player->position().x << _player->position().y << _player->position().z;
     _socket.send(packet, _socket.serverId());
 }
-
 
 void Client::processInit(sf::Packet& packet) {
     sf::Uint16 targetId;
@@ -71,7 +69,23 @@ void Client::processDisconnect(sf::Uint16 targetId) {
 
 
 void Client::processCustomPacket(MsgType type, sf::Packet& packet) {
-    ClientUDP::processCustomPacket(type, packet);
+    Cube::Type cubeType;
+    int buff[3];
+
+    switch (type) {
+        case MsgType::AddCube:
+            sf::Uint16 tmp;
+            packet >> tmp >> buff[0] >> buff[1] >> buff[2];
+            cubeType = Cube::Type(tmp);
+            _map->addCube(cubeType, buff[0], buff[1], buff[2]);
+            Log::log("Client: RemoveCube.");
+            break;
+        case MsgType::RemoveCube:
+            packet >> buff[0] >> buff[1] >> buff[2];
+            _map->removeCube(buff[0], buff[1], buff[2]);
+            Log::log("Client: RemoveCube.");
+            break;
+    }
 }
 
 void Client::processDisconnected() {
@@ -79,4 +93,21 @@ void Client::processDisconnected() {
         _world->removeMesh("Player" + std::to_string(it->first));
         _players.erase(it++);
     }
+}
+
+void Client::addCube(Pos pos, Cube::Type type) {
+    sf::Packet packet;
+
+    packet << MsgType::AddCube << (sf::Uint16)type << pos.x << pos.y << pos.z;
+    _socket.send(packet, _socket.serverId());
+
+    Log::log("Client: AddCube.");
+}
+
+void Client::removeCube(Pos pos) {
+    sf::Packet packet;
+    packet << MsgType::RemoveCube << pos.x << pos.y << pos.z;
+    _socket.send(packet, _socket.serverId());
+
+    Log::log("Client: RemoveCube.");
 }
