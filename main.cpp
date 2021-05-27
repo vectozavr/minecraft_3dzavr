@@ -231,7 +231,8 @@ void Minecraft::play() {
 
 int main(int argc, char* argv[]) {
     Minecraft game;
-    game.create(1920, 1080, "Minecraft");
+    game.create(1280, 720, "Minecraft");
+    //game.create(1920, 1080, "Minecraft");
     //game.create(2048, 1152, "Minecraft");
     //game.create(3072, 1920, "Minecraft");
     //game.create(3840, 2160, "Minecraft");

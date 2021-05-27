@@ -78,6 +78,7 @@ bool ServerUDP::timeout(sf::Uint16 playerId)
         _socket.sendRely(packet, client);
 
     Log::log("ServerUDP: client Id = " + std::to_string(playerId) + " disconnected due to timeout.");
+    processDisconnect(playerId);
 
     return true;
 }

@@ -78,12 +78,14 @@ void Client::processCustomPacket(MsgType type, sf::Packet& packet) {
             packet >> tmp >> buff[0] >> buff[1] >> buff[2];
             cubeType = Cube::Type(tmp);
             _map->addCube(cubeType, buff[0], buff[1], buff[2]);
-            Log::log("Client: RemoveCube.");
+            Log::log("Client: AddCube (" + std::to_string(tmp) + ") at [" + std::to_string(buff[0]) + ", " + std::to_string(buff[1]) + ", " + std::to_string(buff[2]) + "]");
+
             break;
         case MsgType::RemoveCube:
             packet >> buff[0] >> buff[1] >> buff[2];
             _map->removeCube(buff[0], buff[1], buff[2]);
-            Log::log("Client: RemoveCube.");
+            Log::log("Client: RemoveCube at [" + std::to_string(buff[0]) + ", " + std::to_string(buff[1]) + ", " + std::to_string(buff[2]) + "]");
+
             break;
     }
 }
@@ -101,7 +103,7 @@ void Client::addCube(Pos pos, Cube::Type type) {
     packet << MsgType::AddCube << (sf::Uint16)type << pos.x << pos.y << pos.z;
     _socket.send(packet, _socket.serverId());
 
-    Log::log("Client: AddCube.");
+    Log::log("Client: AddCube (" + std::to_string(type) + ") at [" + std::to_string(pos.x) + ", " + std::to_string(pos.y) + ", " + std::to_string(pos.z) + "]");
 }
 
 void Client::removeCube(Pos pos) {
@@ -109,5 +111,5 @@ void Client::removeCube(Pos pos) {
     packet << MsgType::RemoveCube << pos.x << pos.y << pos.z;
     _socket.send(packet, _socket.serverId());
 
-    Log::log("Client: RemoveCube.");
+    Log::log("Client: RemoveCube at [" + std::to_string(pos.x) + ", " + std::to_string(pos.y) + ", " + std::to_string(pos.z) + "]");
 }

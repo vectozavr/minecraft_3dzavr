@@ -50,7 +50,6 @@ void Server::processDisconnect(sf::Uint16 senderId) {
 
     sendPacket << MsgType::Disconnect << senderId;
     _players.erase(senderId);
-    _socket.removeConnection(senderId);
     for (const auto& player : _players)
         _socket.sendRely(sendPacket, player.first);
 }
@@ -58,30 +57,30 @@ void Server::processDisconnect(sf::Uint16 senderId) {
 
 void Server::processCustomPacket(MsgType type, sf::Packet& packet, sf::Uint16 senderId) {
     sf::Packet sendPacket;
-    int buf[3];
+    int buff[3];
     sf::Uint16 tmp;
     Cube::Type cubeType;
 
     switch (type) {
         case MsgType::AddCube:
-            packet >> tmp >> buf[0] >> buf[1] >> buf[2];
-            sendPacket << MsgType::AddCube << tmp << buf[0] << buf[1] << buf[2];
+            packet >> tmp >> buff[0] >> buff[1] >> buff[2];
+            sendPacket << MsgType::AddCube << tmp << buff[0] << buff[1] << buff[2];
             for(auto& _player : _players) {
                 if(senderId != _player.first)
                     _socket.sendRely(sendPacket, _player.first);
             }
 
-            Log::log("Server: AddCube.");
+            Log::log("Server: AddCube (" + std::to_string(tmp) + ") at [" + std::to_string(buff[0]) + ", " + std::to_string(buff[1]) + ", " + std::to_string(buff[2]) + "]");
 
             break;
         case MsgType::RemoveCube:
-            packet >> buf[0] >> buf[1] >> buf[2];
-            sendPacket << MsgType::RemoveCube << buf[0] << buf[1] << buf[2];
+            packet >> buff[0] >> buff[1] >> buff[2];
+            sendPacket << MsgType::RemoveCube << buff[0] << buff[1] << buff[2];
             for(auto& _player : _players) {
                 if(senderId != _player.first)
                     _socket.sendRely(sendPacket, _player.first);
             }
-            Log::log("Server: RemoveCube.");
+            Log::log("Server: RemoveCube at [" + std::to_string(buff[0]) + ", " + std::to_string(buff[1]) + ", " + std::to_string(buff[2]) + "]");
             break;
     }
 }
