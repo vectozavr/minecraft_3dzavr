@@ -32,8 +32,15 @@ Simple implementation of game [Minecraft](https://www.minecraft.net/) using [3dz
 
 For any issues, please, create new issue in this repository.
 
-Demo:
+Demos:
+
+Online:
+![Project demonstration](img/online.png)
+Building:
 ![Project demonstration](img/building_3.png)
+There are 6 types of camera mode:
 ![Project demonstration](img/building_2.png)
+Another building
 ![Project demonstration](img/building_1.png)
+Cubes:
 ![Project demonstration](img/cubes_1.png)
