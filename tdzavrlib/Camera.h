@@ -105,6 +105,9 @@ public:
     // Rotate mesh around normalised vector 'v' by 'r' radians relative val 'point4D'
     void rotateRelativePoint(const Point4D& s, const Point4D& v, double r) override;
 
+    void rotateToAngle(const Point4D& v) { rotate(v - p_angle); }
+    void rotateToLeftUpLookAt(const Point4D& v) { rotateLeftUpLookAt(v - p_angleLeftUpLookAt); }
+
     void setTrace(bool t) { trace = t; } // Performance heavy (to observe what see camera from external camera)
 
     std::vector<Triangle>& tracedTriangles();

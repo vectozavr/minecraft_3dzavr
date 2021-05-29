@@ -17,6 +17,7 @@ private:
     double _health = 100;
     double jumpHeight = 1.5;
     double walkSpeed = 7;
+    double _headAngle = 0;
 
     double g = 35;
 
@@ -49,6 +50,7 @@ public:
         setAcceleration({0, -g, 0});
         setCollision(true);
         setVisible(false);
+        setColor({240, 168, 168});
     };
 
     void update();
@@ -98,6 +100,12 @@ public:
     [[nodiscard]] double health() const { return _health; }
     [[nodiscard]] std::string name() const { return "Player_" + _name; }
 
+
+    std::shared_ptr<Camera> camera() { return _camera; }
+
+    // This is for situation when you want to store the position of the head but you dont have attached camera
+    void setHeadAngle(double a) { _headAngle = a; }
+    [[nodiscard]] double headAngle() const { return _headAngle; };
 };
 
 

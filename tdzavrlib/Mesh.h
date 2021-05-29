@@ -58,6 +58,8 @@ public:
     void scale(const Point4D& s);
     void decompose(double value) override;
 
+    void rotateToAngle(const Point4D& v) { rotate(v - p_angle); }
+
     [[nodiscard]] Point4D position() const override { return p_position; }
     [[nodiscard]] Point4D angle() const override { return p_angle; }
 

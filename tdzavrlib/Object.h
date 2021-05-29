@@ -23,7 +23,8 @@ public:
     virtual void rotate(const Point4D& v, double rv) {}
     virtual void rotateRelativePoint(const Point4D& s, const Point4D& v, double r) {}
 
-    [[nodiscard]] virtual Point4D position() const { return p_position; }
+    [[nodiscard]] Point4D position() const { return p_position; }
+    [[nodiscard]] Point4D angle() const { return p_angle; }
 
     void attach(const std::shared_ptr<Object>& object) {
         v_attached.push_back(object);
